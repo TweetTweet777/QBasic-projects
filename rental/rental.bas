@@ -1,4 +1,4 @@
-'FILENAME: RENTAL.BAS
+'FILENAME: RENTAL.BAS'
 'PROGRAMMER: Ly, Max
 'DATE: 12/04/2022
 'VERSION: Not Final
@@ -28,6 +28,7 @@
 'clear screen
 CLS
 
+'calculates car type + data validation for input 
 DO UNTIL CAR! = 4
 
     CAR! = 0
@@ -61,6 +62,8 @@ DO UNTIL CAR! = 4
 
 LOOP
 
+
+'calculates rental cost
 DO UNTIL DAYS% > 0
     INPUT "Amount of Days Rented: ", DAYS%
     IF DAYS% <= 0 THEN
@@ -70,6 +73,7 @@ DO UNTIL DAYS% > 0
 LOOP
 BASIC.CHG! = DAYS% * BASIC.CHG!
 
+'calculates milage cost
 DO UNTIL KMS% > 0
     INPUT "Distance Travelled (KMS): ", KMS%
     IF KMS% <= 0 THEN
@@ -80,6 +84,7 @@ DO UNTIL KMS% > 0
 LOOP
 MLG.CHG! = KMS% * MLG.CHG!
 
+'data validation for insurance
 DO WHILE (INSURANCE% < 1) OR (INSURANCE% > 2)
     INPUT "Insurance Plan (1 or 2): ", INSURANCE%
     IF (INSURANCE% < 1) OR (INSURANCE% > 2) THEN
@@ -88,6 +93,7 @@ DO WHILE (INSURANCE% < 1) OR (INSURANCE% > 2)
     END IF
 LOOP
 
+'calculates insurance cost
 IF INSURANCE% = 1 THEN
     INS.CHG! = 0.2 * (BASIC.CHG! + MLG.CHG!)
 ELSE
@@ -96,6 +102,7 @@ END IF
 
 TOTAL.CHG! = BASIC.CHG! + MLG.CHG! + INS.CHG!
 
+'prints heading
 PRINT , , "Acme Car Rental Company"
 PRINT , , "The Tax Evasion Calculator"
 PRINT , , "--------------------------"
@@ -109,3 +116,5 @@ PRINT , "Insurance Charge", "Total Charge"
 PRINT , "----------------", "------------"
 PRINT , INS.CHG!, , TOTAL.CHG!
 
+'Halts Execution
+END
