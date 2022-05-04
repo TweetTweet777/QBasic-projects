@@ -11,3 +11,5 @@ Rating! = X + Z * 0.85
 PRINT "Teacher", , "Rating"
 PRINT "-------", , "------"
 PRINT sname$, , Rating!
+
+END
