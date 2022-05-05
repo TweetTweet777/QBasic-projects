@@ -1,7 +1,7 @@
 On Error GoTo handler
 line$ = "%"
-chek% = 0
-loopypoopy% = 0
+check% = 0
+loops% = 0
 Cls
 
 GoSub getinput
@@ -10,12 +10,12 @@ Cls
 
 GoSub headings
 
-Do Until EOF(1) Or loopypoopy% = 18
+Do Until EOF(1) Or loops% = 18
     Input #1, student$, test1%, test2%, test3%, credits%
     avgscore! = (test1% + test2% + test3%) / 3
     If (avgscore! >= 70 And credits% >= 18) Then pass$ = "Pass" Else pass$ = "Fail"
     GoSub outputs
-    loopypoopy% = loopypoopy% + 1
+    loops% = loops% + 1
 Loop
 
 Close #1
@@ -45,12 +45,12 @@ Return
 
 getinput:
 Do While (LOF(1) = 0)
-    If chek% = 1 Then GoSub invalid
+    If check% = 1 Then GoSub invalid
     Cls
     Input "Input file name: ", file$
     If (Not ((Right$(file$, 4)) = ".txt")) Then file$ = file$ + ".txt"
     Open file$ For Input As #1
-    chek% = 1
+    check% = 1
 Loop
 Return
 
