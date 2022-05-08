@@ -1,81 +1,67 @@
-On Error GoTo handler
-line$ = "%"
-check% = 0
-loops% = 0
-Cls
+'clears screen
+CLS
 
-GoSub getinput
+'calls subroutines in set order
+GOSUB printheadings
+GOSUB printsubheadings
+GOSUB reading
+GOSUB calculate
+GOSUB validation
+GOSUB printoutput
 
-Cls
+END
 
-GoSub headings
+'sub for reading data
+reading:
+READ NAME$, TEST1%, TEST2%, TEST3%, CREDITS%
+RETURN
 
-Do Until EOF(1) Or loops% = 18
-    Input #1, student$, test1%, test2%, test3%, credits%
-    avgscore! = (test1% + test2% + test3%) / 3
-    If (avgscore! >= 70 And credits% >= 18) Then pass$ = "Pass" Else pass$ = "Fail"
-    GoSub outputs
-    loops% = loops% + 1
-Loop
+'sub for calculating score average and whether the student passes or not
+calculate:
+AVGSCORE! = (TEST1% + TEST2% + TEST3%) / 3
+IF (AVGSCORE! >= 70 AND CREDITS% >= 18) THEN PASS$ = "Pass" ELSE PASS$ = "Fail"
+RETURN
 
-Close #1
+'prints headings
+printheadings:
+PRINT TAB(30); "Year 11 Programming"
+PRINT TAB(31); "Term 1 Final Mark"
+PRINT TAB(30); STRING$(19, "*")
+PRINT
+RETURN
 
-End
+'prints subheadings
+printsubheadings:
+PRINT TAB(7); "Student";
+PRINT TAB(23); "Term 1 Average";
+PRINT TAB(47); "Credits";
+PRINT TAB(64); "Term 1 Status"
+PRINT TAB(7); STRING$(7, "*"); TAB(23); STRING$(14, "*"); TAB(47); STRING$(7, "*"); TAB(64); STRING$(13, "*")
+RETURN
 
-headings:
-maintitle$ = "Year 11 Programming"
-subtitle$ = "Term 1 Final Mark"
-Print middlealign(maintitle$)
-Print middlealign(subtitle$)
-Print middlealign(String$(Len(maintitle$), line$))
-Print
-Print Tab(twenty("Student", 1, 4)); "Student"; Tab(twenty("Term 1 Average", 2, 4)); "Term 1 Average"; Tab(twenty("Credits", 3, 4)); "Credits"; Tab(twenty("Term 1 Status", 4, 4)); "Term 1 Status"
-Print Tab(twenty(String$(Len("Student"), line$), 1, 4)); String$(Len("Student"), line$);
-Print Tab(twenty(String$(Len("Term 1 Average"), line$), 2, 4)); String$(Len("Term 1 Average"), line$);
-Print Tab(twenty(String$(Len("Credits"), line$), 3, 4)); String$(Len("Credits"), line$);
-Print Tab(twenty(String$(Len("Term 1 Status"), line$), 4, 4)); String$(Len("Term 1 Status"), line$);
-Return
+'prints output
+printoutput:
+PRINT TAB(alignfraction(NAME$, 1, 4)); NAME$;
+PRINT TAB(alignfraction(STR$(AVGSCORE!), 2, 4)); AVGSCORE!;
+PRINT TAB(alignfraction(STR$(CREDITS%), 3, 4)); CREDITS%;
+PRINT TAB(alignfraction(PASS$, 4, 4)); PASS$
+RETURN
 
-outputs:
-Print Tab(twenty(student$, 1, 4)); student$;
-Print Tab(twenty(Str$(avgscore!), 2, 4)); avgscore!;
-Print Tab(twenty(Str$(credits%), 3, 4)); credits%;
-Print Tab(twenty(pass$, 4, 4)); pass$
-Return
+'sub for data validation
+validation:
+IF TEST1% < 0 OR TEST2% < 0 OR TEST3% < 0 OR CREDITS% < 0 THEN
+    NAME$ = "Contains Invalid Data!"
 
-getinput:
-Do While (LOF(1) = 0)
-    If check% = 1 Then GoSub invalid
-    Cls
-    Input "Input file name: ", file$
-    If (Not ((Right$(file$, 4)) = ".txt")) Then file$ = file$ + ".txt"
-    Open file$ For Input As #1
-    check% = 1
-Loop
-Return
+END IF
+RETURN
 
-invalid:
-Cls
-Print "Input file name: ";
-Color 4
-Print "INVALID INPUT!"
-Color 7
-Sleep 1
-Cls
-Return
+'function for aligning text (not own work)
+FUNCTION alignfraction (in$, position%, slots%)
+    slots% = 80 / slots%
+    position% = (position% - 1) * slots%
+    tabspot% = (slots% - LEN(in$)) / 2
+    alignfraction = tabspot% + position%
+END FUNCTION
 
-handler:
-errorflag = Err
-Resume Next
-
-Function middlealign$ (align$)
-    spacer! = 40 - Int(Len(align$) / 2 - .5)
-    middlealign = String$(spacer!, " ") + align$
-End Function
-
-Function twenty (in$, position%, tol%)
-    tol% = 80 / tol%
-    position% = (position% - 1) * tol%
-    tabspot% = (tol% - Len(in$)) / 2
-    twenty = tabspot% + position%
-End Function
+'data
+DATA "David Bowie",80,55,75,17
